@@ -7,7 +7,9 @@ import chariot.model.GameStateEvent
 import chariot.model.GameStateEvent.Full
 import chariot.model.GameStateEvent.State
 import chariot.util.Board
+import chariot.util.Board.FEN
 import cutelyn.engines.IChessEngine
+import cutelyn.evaluators.PointsEvaluator
 
 class Box<T>(var value : T) {
     fun get(): T {

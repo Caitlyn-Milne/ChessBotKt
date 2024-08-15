@@ -6,7 +6,7 @@ import chariot.util.Board.PieceType
 import chariot.util.Board.Side
 import java.util.Random
 
-class PointsEvaluator : IEvaluator
+class PointsEvaluator : IBoardEvaluator
 {
 
     private val random = Random()

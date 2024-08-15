@@ -6,8 +6,9 @@ import chariot.model.Enums
 import chariot.model.Event.ChallengeCreatedEvent
 import chariot.model.Event.GameStartEvent
 import chariot.util.Board.Side
-import cutelyn.engines.MultithreadedDepthFirstSearchEngine
+import cutelyn.engines.MultithreadedEngine
 import cutelyn.evaluators.PointsEvaluatorWithTables
+import cutelyn.evaluators.SimpleDfsEvaluator
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -32,17 +33,15 @@ class LichessServer {
                     val challenge = event.challenge.id
                     matchMutex.withLock {
                         if(numMatches < 3) {
-                            numMatches++
                             client.bot().acceptChallenge(challenge)
                         }
                         else {
-                            client.bot().declineChallenge(challenge, Enums.DeclineReason.later)
+                            client.bot().declineChallenge(challenge, Enums.DeclineReason.generic)
                         }
                     }
                 }
                 is GameStartEvent -> {
                     startGame(client, event)
-
                 }
                 else -> continue
             }
@@ -50,8 +49,11 @@ class LichessServer {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun startGame(client: ClientAuth, event: GameStartEvent) {
-        val engine = MultithreadedDepthFirstSearchEngine(PointsEvaluatorWithTables(), 3)
+    private suspend fun startGame(client: ClientAuth, event: GameStartEvent) {
+        matchMutex.lock {
+            numMatches++
+        }
+        val engine = MultithreadedEngine(SimpleDfsEvaluator(3, PointsEvaluatorWithTables()))
         val runner = LichessGameRunner(client)
         val side = if (event.game.color == Enums.Color.white) Side.WHITE else Side.BLACK
         GlobalScope.async { //We can fire and forget, the runner will handle itself

@@ -6,7 +6,7 @@ import chariot.util.Board.PieceType
 import chariot.util.Board.Side
 import java.util.Random
 
-class PointsEvaluatorWithTables : IEvaluator
+class PointsEvaluatorWithTables : IBoardEvaluator
 {
     private val pawnTable = arrayOf(
         doubleArrayOf(0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00),
