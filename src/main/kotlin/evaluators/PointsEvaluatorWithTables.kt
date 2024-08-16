@@ -65,8 +65,7 @@ class PointsEvaluatorWithTables : IBoardEvaluator
 
     private val random = Random()
 
-    override fun evaluate(board: Board): Double {
-        val validMoves = board.validMoves()
+    override fun evaluate(board: Board, moves : Set<Board.Move>): Double {
         val side = if(board.whiteToMove())Side.WHITE else Side.BLACK
         var piecesDelta = 0.00
         for (row in 0 until 8) {
@@ -81,7 +80,7 @@ class PointsEvaluatorWithTables : IBoardEvaluator
         }
         piecesDelta *= 100
         val rand = (random.nextDouble() - 0.50)
-        return piecesDelta + rand + validMoves.size
+        return piecesDelta + rand + moves.size
     }
 
 

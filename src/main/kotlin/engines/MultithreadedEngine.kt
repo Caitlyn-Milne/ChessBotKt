@@ -9,7 +9,8 @@ class MultithreadedEngine(val evaluator: IBoardEvaluator)  : IChessEngine {
         withContext(Dispatchers.Default) {
             val deferredScores = board.validMoves().map { move ->
                 async {
-                    val score = -evaluator.evaluate(board.play(move))
+                    val boardAfterMove = board.play(move)
+                    val score = -evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves())
                     Pair<Board.Move, Double>(move, score)
                 }
             }

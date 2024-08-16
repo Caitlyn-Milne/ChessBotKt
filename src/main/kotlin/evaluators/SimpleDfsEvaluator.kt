@@ -5,7 +5,7 @@ import kotlin.math.max
 
 class SimpleDfsEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator) : IBoardEvaluator {
 
-    private fun searchEvaluation(board : Board, level : Int) : Double {
+    private fun searchEvaluation(board : Board, moves: Set<Board.Move>, level : Int) : Double {
         return when(board.gameState()!!) {
             Board.GameState.checkmate -> {
                 -1000000.00
@@ -17,12 +17,12 @@ class SimpleDfsEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)
             }
             Board.GameState.ongoing -> {
                 if(level == maxDepth)
-                    return baseEvaluator.evaluate(board)
+                    return baseEvaluator.evaluate(board, moves)
 
                 var maxScore = -1000000.00
 
-                for(move in board.validMoves()) {
-                    val score = -searchEvaluation(board.play(move), level + 1) //if positive for the other player so its negative for us
+                for(move in moves) {
+                    val score = -searchEvaluation(board.play(move), moves, level + 1) //if positive for the other player so its negative for us
                     maxScore = max(maxScore, score)
                 }
 
@@ -32,7 +32,7 @@ class SimpleDfsEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)
         }
     }
 
-    override fun evaluate(board: Board): Double {
-        return searchEvaluation(board, 1)
+    override fun evaluate(board: Board, moves : Set<Board.Move>): Double {
+        return searchEvaluation(board, moves, 1)
     }
 }

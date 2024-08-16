@@ -10,15 +10,15 @@ import cutelyn.engines.IChessEngine
 class LichessAIGameRunner(val engine : IChessEngine, client : ClientAuth) : LichessGameRunner(client) {
 
     fun runGame(level : Int, side: Side){
-        val gameId = createGame()
+        val gameId = createGame(level, side)
         connectAndRunGame(engine, gameId, side)
     }
 
-    private fun createGame() : String {
+    private fun createGame(level: Int, side: Side) : String {
         val oneChallengeAi : One<ChallengeAI> = client.bot().challengeAI { conf ->
             conf.clockClassical30m0s()
-                .color { it.black() }
-                .level(4)
+                .color { if (side == Side.WHITE) it.white() else it.black() }
+                .level(level)
         } ?: throw Exception("Could not challenge bot")
 
         if (oneChallengeAi is Fail){

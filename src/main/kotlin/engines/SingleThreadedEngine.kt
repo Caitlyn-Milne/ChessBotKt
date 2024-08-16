@@ -9,7 +9,8 @@ class SingleThreadedEngine(val evaluator: IBoardEvaluator) : IChessEngine {
         var bestScore = -1000000.00
 
         for(move in board.validMoves()) {
-            val score = -evaluator.evaluate(board.play(move))
+            val boardAfterMove = board.play(move)
+            val score = -evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves())
             if(score > bestScore){
                 bestScore = score
                 bestMove = move
