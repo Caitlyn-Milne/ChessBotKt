@@ -2,6 +2,7 @@ package cutelyn
 
 import chariot.util.Board
 import cutelyn.engines.IChessEngine
+import kotlin.system.measureTimeMillis
 
 class LocalGameRunner {
     fun runGame(whiteEngine : IChessEngine, blackEngine : IChessEngine) {
@@ -20,9 +21,14 @@ class LocalGameRunner {
                 return false
             }
 
-            val move = engine.calculateMove(board)
-            println("${side} plays: ${move}")
-            board = board.play(move)
+            val time = measureTimeMillis {
+                val move = engine.calculateMove(board)
+                println("${side} plays: ${move}")
+                board = board.play(move)
+            }
+
+            println("It took ${time}ms")
+            println(board.toFEN())
             println(board)
             println()
             return true
