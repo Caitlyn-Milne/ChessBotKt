@@ -7,8 +7,8 @@ import chariot.model.Event.ChallengeCreatedEvent
 import chariot.model.Event.GameStartEvent
 import chariot.util.Board.Side
 import cutelyn.engines.MultithreadedEngine
+import cutelyn.evaluators.AlphaBetaEvaluator
 import cutelyn.evaluators.PointsEvaluatorWithTables
-import cutelyn.evaluators.SimpleDfsEvaluator
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -53,7 +53,7 @@ class LichessServer {
         matchMutex.lock {
             numMatches++
         }
-        val engine = MultithreadedEngine(SimpleDfsEvaluator(3, PointsEvaluatorWithTables()))
+        val engine = MultithreadedEngine(AlphaBetaEvaluator(4, PointsEvaluatorWithTables()))
         val runner = LichessGameRunner(client)
         val side = if (event.game.color == Enums.Color.white) Side.WHITE else Side.BLACK
         GlobalScope.async { //We can fire and forget, the runner will handle itself
