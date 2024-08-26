@@ -5,7 +5,8 @@ import kotlin.experimental.inv
 import kotlin.experimental.or
 
 object BoardSquare {
-    val EMPTY : Byte = 0b01110111.toByte()
+    val EMPTY : Byte = 0b00000111.toByte()
+    val PACKED_EMPTY : Byte = 0b01110111.toByte()
     private val firstMask : Byte = 0b00001111.toByte()
     private val secondMask : Byte = 0b11110000.toByte()
     private val pieceMask : Byte = 0b00000111.toByte()

@@ -14,7 +14,8 @@ class BestMovesTests {
 
     @ParameterizedTest
     @CsvSource(
-        "2k5/ppp2pp1/2b4p/8/5P2/4r3/N1r5/6K1 b - - 0 33, e3e1"
+        "2k5/ppp2pp1/2b4p/8/5P2/4r3/N1r5/6K1 b - - 0 33, e3e1",
+        "rnbqkbnr/ppppp2p/8/5Pp1/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1, d1h5"
     )
     fun assertBestMove(fen: String, expectedMove : String) {
         val board = Board.fromFEN(fen)
