@@ -9,7 +9,7 @@ class AlphaBetaEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)
     private fun searchEvaluation(board : Board, moves : Set<Board.Move>, level : Int, alpha : Double, beta : Double) : Double {
         return when(board.gameState()!!) {
             Board.GameState.checkmate -> {
-                -1000000.00
+                -1000000.00 - level
             }
             Board.GameState.stalemate,
             Board.GameState.draw_by_fifty_move_rule,

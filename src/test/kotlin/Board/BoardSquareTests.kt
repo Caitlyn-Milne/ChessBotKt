@@ -1,3 +1,5 @@
+package Board
+
 import cutelyn.Board.BoardSquare
 import cutelyn.Board.PieceType
 import org.junit.jupiter.params.ParameterizedTest
