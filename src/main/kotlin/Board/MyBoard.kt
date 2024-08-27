@@ -57,4 +57,29 @@ class MyBoard {
     operator fun set(col : Int, row : Int, value : Byte) {
         set(BoardCoordinate.getIndex(col, row), value)
     }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.appendLine("Black")
+        for (row in 7 downTo 0) {
+            for (col in 0..7) {
+                val byte = get(col, row)
+                val isWhite = BoardSquare.isWhite(byte)
+                val character = when(BoardSquare.getPieceType(byte)) {
+                    PieceType.NONE -> "  "
+                    PieceType.PAWN -> if(isWhite) "♙ " else "♟ "
+                    PieceType.KNIGHT -> if(isWhite) "♘ " else "♞ "
+                    PieceType.BISHOP -> if(isWhite) "♗ " else "♝ "
+                    PieceType.ROOK -> if(isWhite) "♖ " else "♜ "
+                    PieceType.QUEEN -> if(isWhite) "♔ " else "♛ "
+                    PieceType.KING -> if(isWhite) "♕ " else "♚ "
+                    PieceType.INVALID -> "? "
+                }
+                sb.append(character)
+            }
+            sb.appendLine()
+        }
+        sb.appendLine("White")
+        return sb.toString()
+    }
 }
