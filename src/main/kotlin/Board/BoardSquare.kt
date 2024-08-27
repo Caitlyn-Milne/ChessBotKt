@@ -71,4 +71,12 @@ object BoardSquare {
     fun pack(first : Byte, second : Byte) : Byte {
         return (first.toUInt() or (second.toUInt() shl 4)).toByte()
     }
+
+    /**
+     * returns an unpacked byte presenting a board square with a given piece type and color
+     */
+    fun create(pieceType: PieceType, isWhite: Boolean): Byte {
+        val byte = setWhite(0.toByte(), isWhite)
+        return setPieceType(byte, pieceType)
+    }
 }

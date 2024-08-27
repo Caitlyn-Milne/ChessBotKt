@@ -2,6 +2,33 @@ package cutelyn.Board
 
 class MyBoard {
 
+    companion object {
+        fun fromStandardPosition() : MyBoard {
+            val board = MyBoard()
+
+            for(i in 0 until 8) {
+                board[i,1] = BoardSquare.create(PieceType.PAWN, true)
+                board[i,6] = BoardSquare.create(PieceType.PAWN, false)
+            }
+
+            fun setBackRow(isWhite : Boolean) {
+                val row = if(isWhite) 0 else 7
+                board[0,row] = BoardSquare.create(PieceType.ROOK, isWhite)
+                board[1,row] = BoardSquare.create(PieceType.KNIGHT, isWhite)
+                board[2,row] = BoardSquare.create(PieceType.BISHOP, isWhite)
+                board[4,row] = BoardSquare.create(PieceType.KING, isWhite)
+                board[3,row] = BoardSquare.create(PieceType.QUEEN, isWhite)
+                board[5,row] = BoardSquare.create(PieceType.BISHOP, isWhite)
+                board[6,row] = BoardSquare.create(PieceType.KNIGHT, isWhite)
+                board[7,row] = BoardSquare.create(PieceType.ROOK, isWhite)
+            }
+
+            setBackRow(true)
+            setBackRow(false)
+            return board
+        }
+    }
+
     private val squaresPacked = ByteArray(32) { BoardSquare.PACKED_EMPTY } // 48 bytes
 
     operator fun get(index : Int) : Byte {
