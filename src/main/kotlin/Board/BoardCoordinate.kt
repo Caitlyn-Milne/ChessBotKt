@@ -1,6 +1,7 @@
 package cutelyn.Board
 
 object BoardCoordinate {
+
     // Indices:
     // 56 57 58 59 60 61 62 63   7
     // 48 49 50 51 52 53 54 55   6
@@ -28,7 +29,7 @@ object BoardCoordinate {
      */
     fun getCol(index : Int) : Int {
         if(index !in 0 .. 63)
-            throw IllegalArgumentException("Column and row must be between 0 and 63 inclusive.")
+            throw IllegalArgumentException("Index must be between 0 and 63 inclusive.")
         return index % 8
     }
 
@@ -37,7 +38,7 @@ object BoardCoordinate {
      */
     fun getRow(index : Int) : Int {
         if(index !in 0 .. 63)
-            throw IllegalArgumentException("Column and row must be between 0 and 63 inclusive.")
+            throw IllegalArgumentException("Index must be between 0 and 63 inclusive.")
         return index / 8
     }
 
