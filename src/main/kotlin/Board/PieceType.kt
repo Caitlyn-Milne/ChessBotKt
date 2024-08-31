@@ -10,7 +10,10 @@ enum class PieceType(val byte: Byte){
     ROOK(4),
     QUEEN(5),
     KING(6),
-    INVALID(Byte.MAX_VALUE);
+    INVALID(0);
+
+    val uByte
+        get() = byte.toUByte()
 
     companion object {
         fun fromByte(byte: Byte): PieceType {
