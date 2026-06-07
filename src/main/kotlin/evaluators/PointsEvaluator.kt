@@ -6,13 +6,14 @@ import chariot.util.Board.Piece
 import chariot.util.Board.PieceType
 import chariot.util.Board.Side
 import java.util.Random
+import kotlin.coroutines.CoroutineContext
 
 class PointsEvaluator : IBoardEvaluator
 {
 
     private val random = Random()
 
-    override fun evaluate(board: Board, moves : Set<Move>): Double {
+    override fun evaluate(board: Board, moves : Set<Move>, maxDepth : Int, coroutineContext: CoroutineContext): Double {
         val side = if(board.whiteToMove())Side.WHITE else Side.BLACK
         var piecesDelta = 0.00
         for (row in 0 until 8) {

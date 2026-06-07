@@ -1,19 +1,12 @@
 package cutelyn
-import chariot.Client
-import chariot.util.Board
-import cutelyn.engines.MultithreadedEngine
-import cutelyn.engines.SingleThreadedEngine
+import cutelyn.engines.NaiveIterativeDeepeningEngine
 import cutelyn.evaluators.AlphaBetaEvaluator
 import cutelyn.evaluators.PointsEvaluatorWithTables
-import cutelyn.evaluators.RandomEvaluator
-import cutelyn.evaluators.SimpleDfsEvaluator
-import kotlinx.coroutines.runBlocking
-import kotlin.system.measureTimeMillis
 
 
 fun main() {
-    val whiteEngine = MultithreadedEngine(AlphaBetaEvaluator(4, PointsEvaluatorWithTables()))
-    val blackEngine = MultithreadedEngine(AlphaBetaEvaluator(3, PointsEvaluatorWithTables()))
+    val whiteEngine = NaiveIterativeDeepeningEngine(AlphaBetaEvaluator(PointsEvaluatorWithTables()))
+    val blackEngine = NaiveIterativeDeepeningEngine(AlphaBetaEvaluator(PointsEvaluatorWithTables()))
     LocalGameRunner().runGame(whiteEngine, blackEngine)
 
     //val engine = MultithreadedEngine(AlphaBetaEvaluator(4, PointsEvaluatorWithTables()))

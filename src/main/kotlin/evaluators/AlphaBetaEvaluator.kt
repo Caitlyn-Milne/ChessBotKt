@@ -2,11 +2,14 @@ package cutelyn.evaluators
 
 import chariot.util.Board
 import chariot.util.Board.FromTo
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.isActive
+import kotlin.coroutines.CoroutineContext
 import kotlin.math.max
 
-class AlphaBetaEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator {
+class AlphaBetaEvaluator( val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator {
 
-    private fun searchEvaluation(board : Board, moves : Set<Board.Move>, level : Int, alpha : Double, beta : Double) : Double {
+    private fun searchEvaluation(board : Board, moves : Set<Board.Move>, level : Int, maxDepth : Int, alpha : Double, beta : Double, coroutineContext: CoroutineContext) : Double {
         return when(board.gameState()!!) {
             Board.GameState.checkmate -> {
                 -1000000.00 - level
@@ -18,7 +21,7 @@ class AlphaBetaEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)
             }
             Board.GameState.ongoing -> {
                 if(level == maxDepth)
-                    return baseEvaluator.evaluate(board,moves)
+                    return baseEvaluator.evaluate(board,moves, maxDepth, coroutineContext)
 
                 var maxScore = -1000000.00
                 val (captures, others) = moves.partition { isCaptureMove(it, board) }
@@ -27,7 +30,7 @@ class AlphaBetaEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)
 
                 for(move in orderedMoves) {
                     val boardAfterMove = board.play(move)
-                    val score = -searchEvaluation(boardAfterMove, boardAfterMove.validMoves(),level + 1, -beta, -newAlpha) //if positive for the other player so its negative for us
+                    val score = -searchEvaluation(boardAfterMove, boardAfterMove.validMoves(),level + 1, maxDepth, -beta, -newAlpha, coroutineContext) //if positive for the other player so its negative for us
                     maxScore = max(maxScore, score)
                     newAlpha = max(newAlpha, score)
                     if (newAlpha >= beta) {
@@ -48,7 +51,7 @@ class AlphaBetaEvaluator(val maxDepth : Int, val baseEvaluator: IBoardEvaluator)
         }
     }
 
-    override fun evaluate(board: Board, moves : Set<Board.Move>): Double {
-        return searchEvaluation(board, moves, 1, -2000000.00,  2000000.00)
+    override fun evaluate(board: Board, moves : Set<Board.Move>, maxDepth : Int, coroutineContext : CoroutineContext): Double {
+        return searchEvaluation(board, moves, 1,maxDepth, -2000000.00,  2000000.00, coroutineContext)
     }
 }

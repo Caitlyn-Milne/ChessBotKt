@@ -2,6 +2,9 @@ package cutelyn.engines
 
 import chariot.util.Board
 import cutelyn.evaluators.IBoardEvaluator
+import kotlinx.coroutines.Dispatchers
+import sun.launcher.resources.launcher
+import kotlin.coroutines.coroutineContext
 
 class SingleThreadedEngine(val evaluator: IBoardEvaluator) : IChessEngine {
     override fun calculateMove(board : Board): Board.Move {
@@ -10,7 +13,7 @@ class SingleThreadedEngine(val evaluator: IBoardEvaluator) : IChessEngine {
 
         for(move in board.validMoves()) {
             val boardAfterMove = board.play(move)
-            val score = -evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves())
+            val score = -evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves(), 4, Dispatchers.Main)
             if(score > bestScore){
                 bestScore = score
                 bestMove = move

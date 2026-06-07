@@ -53,7 +53,7 @@ class LichessServer {
         matchMutex.lock {
             numMatches++
         }
-        val engine = MultithreadedEngine(AlphaBetaEvaluator(4, PointsEvaluatorWithTables()))
+        val engine = MultithreadedEngine(AlphaBetaEvaluator( PointsEvaluatorWithTables()))
         val runner = LichessGameRunner(client)
         val side = if (event.game.color == Enums.Color.white) Side.WHITE else Side.BLACK
         GlobalScope.async { //We can fire and forget, the runner will handle itself
