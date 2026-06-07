@@ -15,7 +15,7 @@ class NaiveIterativeDeepeningEngine(val evaluator: IBoardEvaluator)  : IChessEng
             }
             var depth = 1
             val timeLimit = System.currentTimeMillis() + 5000
-            while (isActive) {
+            while (System.currentTimeMillis() < timeLimit) {
                 val sortedMoves = movesAndScores.keys.sortedBy { -(movesAndScores[it] ?: 0.00) }
                 val deferredScores = sortedMoves.map { move ->
                     async {
@@ -28,7 +28,8 @@ class NaiveIterativeDeepeningEngine(val evaluator: IBoardEvaluator)  : IChessEng
                 do {
                     delay(100.milliseconds)
                     if(System.currentTimeMillis() > timeLimit) {
-                        deferredScores.forEach { it.cancelAndJoin() }
+                        deferredScores.forEach { it.cancel() }
+                        deferredScores.joinAll()
                     }
                 }
                 while (deferredScores.any {it.isActive})
