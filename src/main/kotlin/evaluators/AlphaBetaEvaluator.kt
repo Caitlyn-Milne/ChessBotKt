@@ -10,6 +10,7 @@ import kotlin.math.max
 class AlphaBetaEvaluator( val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator {
 
     private fun searchEvaluation(board : Board, moves : Set<Board.Move>, level : Int, maxDepth : Int, alpha : Double, beta : Double, coroutineContext: CoroutineContext) : Double {
+        coroutineContext.ensureActive()
         return when(board.gameState()!!) {
             Board.GameState.checkmate -> {
                 -1000000.00 - level
