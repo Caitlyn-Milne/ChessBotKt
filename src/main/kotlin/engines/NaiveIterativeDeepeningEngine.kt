@@ -41,4 +41,8 @@ class NaiveIterativeDeepeningEngine(val evaluator: IBoardEvaluator)  : IChessEng
             bestMove
         }
     }
+
+    override fun calculateMoveForDebugging(board: Board, move: Board.Move): Double {
+        return evaluator.evaluate(board, setOf(move), 4, Dispatchers.Main)
+    }
 }

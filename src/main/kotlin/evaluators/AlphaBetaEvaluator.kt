@@ -2,6 +2,7 @@ package cutelyn.evaluators
 
 import chariot.util.Board
 import chariot.util.Board.FromTo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.CoroutineContext
@@ -30,8 +31,9 @@ class AlphaBetaEvaluator( val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator
                 var newAlpha = alpha
 
                 for(move in orderedMoves) {
+
                     val boardAfterMove = board.play(move)
-                    val score = -searchEvaluation(boardAfterMove, boardAfterMove.validMoves(),level + 1, maxDepth, -beta, -newAlpha, coroutineContext) //if positive for the other player so its negative for us
+                    val score = -searchEvaluation(boardAfterMove, boardAfterMove.validMoves(),level + 1, maxDepth, -beta, -newAlpha, coroutineContext) //is positive for the other player so its negative for us
                     maxScore = max(maxScore, score)
                     newAlpha = max(newAlpha, score)
                     if (newAlpha >= beta) {
@@ -54,5 +56,9 @@ class AlphaBetaEvaluator( val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator
 
     override fun evaluate(board: Board, moves : Set<Board.Move>, maxDepth : Int, coroutineContext : CoroutineContext): Double {
         return searchEvaluation(board, moves, 1,maxDepth, -2000000.00,  2000000.00, coroutineContext)
+    }
+
+    override fun evaluateForDebugging(board: Board, move: Board.Move, maxDepth : Int): Double {
+        return searchEvaluation(board, setOf(move), 1, maxDepth, -2000000.00,  2000000.00, Dispatchers.Main)
     }
 }

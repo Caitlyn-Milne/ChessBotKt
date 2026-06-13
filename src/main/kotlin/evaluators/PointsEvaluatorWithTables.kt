@@ -4,7 +4,6 @@ import chariot.util.Board
 import chariot.util.Board.Piece
 import chariot.util.Board.PieceType
 import chariot.util.Board.Side
-import java.util.Random
 import kotlin.coroutines.CoroutineContext
 
 class PointsEvaluatorWithTables : IBoardEvaluator
@@ -64,8 +63,6 @@ class PointsEvaluatorWithTables : IBoardEvaluator
         doubleArrayOf(-20.00, -10.00, -10.00,  -5.00,  -5.00, -10.00, -10.00, -20.00)
     )
 
-    private val random = Random()
-
     override fun evaluate(board: Board, moves : Set<Board.Move>, maxDepth : Int, coroutineContext: CoroutineContext): Double {
         val side = if(board.whiteToMove())Side.WHITE else Side.BLACK
         var piecesDelta = 0.00
@@ -80,8 +77,7 @@ class PointsEvaluatorWithTables : IBoardEvaluator
             }
         }
         piecesDelta *= 100
-        val rand = (random.nextDouble() - 0.50)
-        return piecesDelta + rand + moves.size
+        return piecesDelta + moves.size
     }
 
 

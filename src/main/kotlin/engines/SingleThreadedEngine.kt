@@ -13,7 +13,7 @@ class SingleThreadedEngine(val evaluator: IBoardEvaluator) : IChessEngine {
 
         for(move in board.validMoves()) {
             val boardAfterMove = board.play(move)
-            val score = -evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves(), 4, Dispatchers.Main)
+            val score = evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves(), 4, Dispatchers.Main)
             if(score > bestScore){
                 bestScore = score
                 bestMove = move
@@ -21,5 +21,9 @@ class SingleThreadedEngine(val evaluator: IBoardEvaluator) : IChessEngine {
         }
         println("Best Move: ${bestMove} Best score: ${bestScore}")
         return bestMove
+    }
+
+    override fun calculateMoveForDebugging(board: Board, move: Board.Move): Double {
+        return evaluator.evaluate(board, setOf(move), 4, Dispatchers.Main)
     }
 }
