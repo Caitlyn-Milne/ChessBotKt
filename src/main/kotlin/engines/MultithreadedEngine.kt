@@ -2,13 +2,14 @@ package cutelyn.engines
 
 import chariot.util.Board
 import cutelyn.Board.BoardCoordinate
+import cutelyn.Util.validMovesWithPromotions
 import cutelyn.evaluators.IBoardEvaluator
 import kotlinx.coroutines.*
 
 class MultithreadedEngine(val evaluator: IBoardEvaluator)  : IChessEngine {
     override fun calculateMove(board : Board): Board.Move = runBlocking {
         withContext(Dispatchers.Default) {
-            val deferredScores = board.validMoves().map { move ->
+            val deferredScores = board.validMovesWithPromotions().map { move ->
                 async {
                     val boardAfterMove = board.play(move)
                     val score = -evaluator.evaluate(boardAfterMove, boardAfterMove.validMoves(), 4, coroutineContext)

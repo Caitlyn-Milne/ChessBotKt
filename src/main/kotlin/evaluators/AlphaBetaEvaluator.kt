@@ -2,6 +2,8 @@ package cutelyn.evaluators
 
 import chariot.util.Board
 import chariot.util.Board.FromTo
+import chariot.util.Board.Move
+import cutelyn.Util.validMovesWithPromotions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
@@ -10,7 +12,7 @@ import kotlin.math.max
 
 class AlphaBetaEvaluator( val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator {
 
-    private fun searchEvaluation(board : Board, moves : Set<Board.Move>, level : Int, maxDepth : Int, alpha : Double, beta : Double, coroutineContext: CoroutineContext) : Double {
+    private fun searchEvaluation(board : Board, moves : Set<Move>, level : Int, maxDepth : Int, alpha : Double, beta : Double, coroutineContext: CoroutineContext) : Double {
         coroutineContext.ensureActive()
         return when(board.gameState()!!) {
             Board.GameState.checkmate -> {
@@ -33,7 +35,7 @@ class AlphaBetaEvaluator( val baseEvaluator: IBoardEvaluator)  : IBoardEvaluator
                 for(move in orderedMoves) {
 
                     val boardAfterMove = board.play(move)
-                    val score = -searchEvaluation(boardAfterMove, boardAfterMove.validMoves(),level + 1, maxDepth, -beta, -newAlpha, coroutineContext) //is positive for the other player so its negative for us
+                    val score = -searchEvaluation(boardAfterMove, boardAfterMove.validMovesWithPromotions().toSet(),level + 1, maxDepth, -beta, -newAlpha, coroutineContext) //is positive for the other player so its negative for us
                     maxScore = max(maxScore, score)
                     newAlpha = max(newAlpha, score)
                     if (newAlpha >= beta) {

@@ -1,6 +1,7 @@
 package cutelyn.engines
 
 import chariot.util.Board
+import cutelyn.Util.validMovesWithPromotions
 import cutelyn.evaluators.IBoardEvaluator
 import kotlinx.coroutines.Dispatchers
 import sun.launcher.resources.launcher
@@ -8,7 +9,7 @@ import kotlin.coroutines.coroutineContext
 
 class SingleThreadedEngine(val evaluator: IBoardEvaluator) : IChessEngine {
     override fun calculateMove(board : Board): Board.Move {
-        var bestMove : Board.Move = board.validMoves().first()
+        var bestMove : Board.Move = board.validMovesWithPromotions().first()
         var bestScore = -1000000.00
 
         for(move in board.validMoves()) {

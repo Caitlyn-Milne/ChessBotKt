@@ -1,6 +1,7 @@
 package cutelyn.engines
 
 import chariot.util.Board
+import cutelyn.Util.validMovesWithPromotions
 import cutelyn.evaluators.IBoardEvaluator
 import kotlinx.coroutines.*
 import java.util.Hashtable
@@ -10,7 +11,7 @@ class NaiveIterativeDeepeningEngine(val evaluator: IBoardEvaluator)  : IChessEng
     override fun calculateMove(board : Board): Board.Move = runBlocking {
         withContext(Dispatchers.Default) {
             val movesAndScores = Hashtable<Board.Move, Double>()
-            for(boardMove in board.validMoves()) {
+            for(boardMove in board.validMovesWithPromotions()) {
                 movesAndScores[boardMove] = 0.0
             }
             var depth = 1
